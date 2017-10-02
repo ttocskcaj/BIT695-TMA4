@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="64b81958-de07-4a02-8eec-33b35873f2d4" name="Uniform Server" url="http://localhost/">
+        <fileTransfer port="0" mountedRoot="C:\UniServerZ\www" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
