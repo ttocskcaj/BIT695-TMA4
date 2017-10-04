@@ -7,6 +7,7 @@ class PlayerModel {
 	private $family_name;
 	private $email;
 	private $phone;
+	private $boardgames = null;
 
 	/**
 	 * PlayerModel constructor.
@@ -128,6 +129,19 @@ class PlayerModel {
 			throw new Exception( "No Players Found", ROW_NOT_FOUND );
 		}
 	}
+	// Lazy load the joined boardgames.
+	private function loadBoardgames() {
+		$pdo = Database::getPdo();
+		$statement = $pdo->prepare( "SELECT boardgames.id, boardgames.name, boardgames.description FROM players_boardgames JOIN boardgames on players_boardgames.player_id = boardgames.id WHERE players_boardgames.id=?" );
+		$statement->execute( [ $this->id ] );
+		if($statement->rowCount() > 0){
+			$results = $statement->fetchAll();
+			foreach ($results as $result){
+				$this->boardgames[] = new BoardgameModel($result['name'], $result['description'], $result['id']);
+			}
+		}
+
+	}
 
 	/**
 	 * @return int|null
@@ -202,6 +216,14 @@ class PlayerModel {
 	public function setPhone( String $phone ) {
 		$this->phone = $phone;
 	}
+
+	public function getBoardgames(){
+		if($this->boardgames == null){
+			$this->loadBoardgames();
+		}
+		return $this->boardgames;
+	}
+
 
 
 }

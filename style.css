@@ -3,6 +3,22 @@
 body {
     background-color: #E9E3E6;
     font-family: 'Lato', sans-serif;
+    color: #333;
+}
+
+a:link {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #333;
+    text-decoration: none;
 }
 
 .container {
@@ -10,6 +26,34 @@ body {
     max-width: 800px;
     margin: auto;
     padding: 10px;
+}
+
+nav {
+    background-color: #f1f1f1;
+    overflow: hidden;
+}
+
+nav > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+nav > ul > li {
+    display: inline-block;
+}
+
+nav > ul > li > a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+nav > ul > li > a:hover {
+    background-color: #555;
+    color: white;
 }
 
 h1 {
@@ -40,6 +84,46 @@ label {
 
 .message-success {
     border-color: greenyellow;
+}
+
+.card {
+    margin: 20px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    box-shadow: 5px 5px 5px 0 #818181;
+}
+
+.card > p {
+    padding: 0;
+    margin: 5px 0;
+}
+
+.card > h4 {
+    padding: 0;
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+.card > h3 {
+    margin: 10px 0;
+}
+
+.card-controls {
+    padding: 10px 0;
+    border-top: 1px solid #e1e1e1;
+}
+
+.card-button {
+    padding: 7px;
+    background-color: #e1e1e1;
+    text-decoration: none;
+    color: black;
+}
+
+.card-button:hover {
+    background-color: #555555;
+    color: white;
+
 }
 
 table {

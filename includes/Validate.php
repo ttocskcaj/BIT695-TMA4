@@ -96,6 +96,16 @@ class Validate {
 					$return['message'] = "must be a number.";
 				}
 				break;
+			case "datetime":
+				// Checks if carbon can parse the string.
+				try {
+					$carbon = \Carbon\Carbon::parse($inputValue);
+				} catch (InvalidArgumentException $e){
+					echo $inputValue;
+					$return['message'] = "must be a valid date and time.";
+					$return['passed']  = false;
+				}
+				break;
 			default:
 				$return['rule'] = 'unknown';
 				throw new Exception( 'Unknown rule: ' . $rule_parts[0] );

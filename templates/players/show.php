@@ -10,6 +10,14 @@
 </head>
 <body>
 <div class="container">
+    <nav>
+        <ul>
+            <li><a href="/events.php">Upcoming Events</a></li>
+            <li><a href="/players.php">Members</a></li>
+            <li><a href="/boardgames.php">Board Games</a></li>
+            <li><a href="/players.php">Previous Results/High Scores</a></li>
+        </ul>
+    </nav>
     <h1 class="text-center"><?php echo $player->getFullName(); ?></h1>
     <p>Edit the player and click "update" to save changes.</p>
     <form action="/players.php?page=update" method="post" id="form">
