@@ -1,6 +1,6 @@
 <?php
 
-class PlayerModel {
+class MemberModel {
 
 	private $id;
 	private $first_name;
@@ -10,14 +10,14 @@ class PlayerModel {
 	private $boardgames = null;
 
 	/**
-	 * PlayerModel constructor.
-	 * Creates a new PlayerModel with the defined attributes.
+	 * MemberModel constructor.
+	 * Creates a new MemberModel with the defined attributes.
 	 *
-	 * @param $first_name String - The players first name.
-	 * @param $family_name String - The players family/last name.
-	 * @param $email String - The players email address.
-	 * @param $phone String - The players phone number.
-	 * @param $id int - The players ID.
+	 * @param $first_name String - The members first name.
+	 * @param $family_name String - The members family/last name.
+	 * @param $email String - The members email address.
+	 * @param $phone String - The members phone number.
+	 * @param $id int - The members ID.
 	 */
 	function __construct( $first_name, $family_name, $email, $phone, $id = null ) {
 		$this->first_name  = $first_name;
@@ -39,16 +39,19 @@ class PlayerModel {
 		// Get DPO object.
 		$pdo = Database::getPdo();
 
-		// Create a prepared statement for the query to insert the player.
-		$statement = $pdo->prepare( "INSERT INTO players (first_name, family_name, email, phone) VALUES (:first_name, :family_name, :email, :phone)" );
+		// Create a prepared statement for the query to insert the member.
+		$statement = $pdo->prepare( "INSERT INTO members (first_name, family_name, email, phone) VALUES (:first_name, :family_name, :email, :phone)" );
 		// Bind the named parameters to the statement.
 		$statement->bindParam( ":first_name", $this->first_name );
 		$statement->bindParam( ":family_name", $this->family_name );
 		$statement->bindParam( ":email", $this->email );
 		$statement->bindParam( ":phone", $this->phone );
 
-		// Execute the statement to insert the player.
-		return $statement->execute();
+		// Execute the statement to insert the member.
+		$success  = $statement->execute();
+		$this->id = $pdo->lastInsertId();
+
+		return $success;
 	}
 
 	/**
@@ -61,10 +64,10 @@ class PlayerModel {
 		// Get DPO object.
 		$pdo = Database::getPdo();
 
-		// Create a prepared statement for the query to insert the player.
-		$statement = $pdo->prepare( "DELETE FROM players WHERE id=?" );
+		// Create a prepared statement for the query to insert the member.
+		$statement = $pdo->prepare( "DELETE FROM members WHERE id=?" );
 
-		// Execute the statement to insert the player.
+		// Execute the statement to insert the member.
 		return $statement->execute( [ $id ] );
 	}
 
@@ -78,8 +81,8 @@ class PlayerModel {
 		// Get PDO object.
 		$pdo = Database::getPdo();
 
-		// Create a prepared statement for the query to insert the player.
-		$statement = $pdo->prepare( "UPDATE players SET first_name = :first_name, family_name = :family_name, email = :email, phone = :phone WHERE id = :id" );
+		// Create a prepared statement for the query to insert the member.
+		$statement = $pdo->prepare( "UPDATE members SET first_name = :first_name, family_name = :family_name, email = :email, phone = :phone WHERE id = :id" );
 		// Bind the named parameters to the statement.
 		$statement->bindParam( ":first_name", $this->first_name );
 		$statement->bindParam( ":family_name", $this->family_name );
@@ -87,58 +90,84 @@ class PlayerModel {
 		$statement->bindParam( ":phone", $this->phone );
 		$statement->bindParam( ":id", $this->id );
 
-		// Execute the statement to insert the player.
+		// Execute the statement to insert the member.
 		return $statement->execute();
 	}
 
 	/**
-	 * Finds a player in the database by matching their ID.
+	 * Finds a member in the database by matching their ID.
 	 *
-	 * @param $id String - The Players ID number
+	 * @param $id String - The Members ID number
 	 */
 	public static function findByID( $id ) {
 		$pdo = Database::getPdo();
 
-		$statement = $pdo->prepare( "SELECT id, first_name, family_name, email, phone FROM players  WHERE id=?" );
+		$statement = $pdo->prepare( "SELECT id, first_name, family_name, email, phone FROM members  WHERE id=?" );
 		$statement->execute( [ $id ] );
 		if ( $statement->rowCount() > 0 ) {
-			$player_data = $statement->fetch();
+			$member_data = $statement->fetch();
 
-			return new PlayerModel( $player_data['first_name'], $player_data['family_name'], $player_data['email'], $player_data['phone'], $player_data['id'] );
+			return new MemberModel( $member_data['first_name'], $member_data['family_name'], $member_data['email'], $member_data['phone'], $member_data['id'] );
 		}
 		else {
-			throw new Exception( "Player not found", ROW_NOT_FOUND );
+			throw new Exception( "Member not found", ROW_NOT_FOUND );
 		}
 	}
 
 	public static function getAll() {
 		$pdo = Database::getPdo();
 
-		$statement = $pdo->prepare( "SELECT id, first_name, family_name, email, phone FROM players" );
+		$statement = $pdo->prepare( "SELECT id, first_name, family_name, email, phone FROM members" );
 		$statement->execute();
 		if ( $statement->rowCount() > 0 ) {
-			$player_results = $statement->fetchAll();
-			$players        = [];
-			foreach ( $player_results as $player ) {
-				$players[] = new PlayerModel( $player['first_name'], $player['family_name'], $player['email'], $player['phone'], $player['id'] );
+			$member_results = $statement->fetchAll();
+			$members        = [];
+			foreach ( $member_results as $member ) {
+				$members[] = new MemberModel( $member['first_name'], $member['family_name'], $member['email'], $member['phone'], $member['id'] );
 			}
 
-			return $players;
+			return $members;
 		}
 		else {
-			throw new Exception( "No Players Found", ROW_NOT_FOUND );
+			throw new Exception( "No Members Found", ROW_NOT_FOUND );
 		}
 	}
+
 	// Lazy load the joined boardgames.
 	private function loadBoardgames() {
-		$pdo = Database::getPdo();
-		$statement = $pdo->prepare( "SELECT boardgames.id, boardgames.name, boardgames.description FROM players_boardgames JOIN boardgames on players_boardgames.player_id = boardgames.id WHERE players_boardgames.id=?" );
+		$pdo       = Database::getPdo();
+		$statement = $pdo->prepare( "SELECT boardgames.id, boardgames.name, boardgames.description FROM members_boardgames JOIN boardgames ON members_boardgames.boardgame_id = boardgames.id WHERE members_boardgames.member_id=?" );
 		$statement->execute( [ $this->id ] );
-		if($statement->rowCount() > 0){
+		if ( $statement->rowCount() > 0 ) {
 			$results = $statement->fetchAll();
-			foreach ($results as $result){
-				$this->boardgames[] = new BoardgameModel($result['name'], $result['description'], $result['id']);
+			foreach ( $results as $result ) {
+				$this->boardgames[] = new BoardgameModel( $result['name'], $result['description'], $result['id'] );
 			}
+		}
+
+	}
+
+	public function syncBoardgames( $boardgames ) {
+		$pdo = Database::getPdo();
+
+		try {
+			// Delete existing boardgame links.
+			$statement = $pdo->prepare( "DELETE FROM members_boardgames WHERE member_id = ?" );
+			$statement->execute( [ $this->id ] );
+
+			$statement = $pdo->prepare( "INSERT INTO members_boardgames (member_id, boardgame_id) VALUES (:member_id, :boardgame_id)" );
+			$pdo->beginTransaction();
+			foreach ( $boardgames as $boardgame ) {
+				$statement->bindParam( ":member_id", $this->id );
+				$statement->bindParam( ":boardgame_id", $boardgame );
+				$statement->execute();
+			}
+			$pdo->commit();
+		} catch ( PDOException $e ) {
+			// If anything failed, rollback the changes.
+			$pdo->rollBack();
+			// Throw the exception again to be caught somewhere else.
+			throw $e;
 		}
 
 	}
@@ -217,13 +246,13 @@ class PlayerModel {
 		$this->phone = $phone;
 	}
 
-	public function getBoardgames(){
-		if($this->boardgames == null){
+	public function getBoardgames() {
+		if ( $this->boardgames == null ) {
 			$this->loadBoardgames();
 		}
+
 		return $this->boardgames;
 	}
-
 
 
 }

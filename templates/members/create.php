@@ -2,10 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create New Player</title>
+    <title>Create New Member</title>
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./style.css">
+
+    <!--    jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Select2 library -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+
 
 </head>
 <body>
@@ -13,15 +20,15 @@
     <nav>
         <ul>
             <li><a href="/events.php">Upcoming Events</a></li>
-            <li><a href="/players.php">Members</a></li>
+            <li><a href="/members.php">Members</a></li>
             <li><a href="/boardgames.php">Board Games</a></li>
-            <li><a href="/players.php">Members</a></li>
-            <li><a href="/players.php">Previous Results/High Scores</a></li>
+            <li><a href="/members.php">Members</a></li>
+            <li><a href="/members.php">Previous Results/High Scores</a></li>
         </ul>
     </nav>
     <h1 class="text-center">Create Member</h1>
-    <p>Fill out the form and click "Submit" to create a new player.</p>
-    <form action="/players.php?page=store" method="post" id="form">
+    <p>Fill out the form and click "Submit" to create a new member.</p>
+    <form action="/members.php?page=store" method="post" id="form">
         <div class="form-group">
             <label for="firstName">First Name: </label>
             <!-- Input for First Name. Using HTML5 validation, can't be more than 35 characters and is required -->
@@ -46,12 +53,27 @@
             <input type="tel" id="phone" name="phone" class="form-input"
                    placeholder="Phone Number" required pattern="[0-9]{5,15}">
         </div>
-        <button type="submit">Submit</button>
-        <button type="reset">Clear Form</button>
+        <div class="form-group">
+            <label for="boardgames">Board Games: </label>
+            <select multiple id="boardgames" name="boardgames[]" class="form-input">
+				<?php foreach ( $boardgames as $boardgame ): ?>
+                    <option value="<?php echo $boardgame->getId(); ?>"><?php echo $boardgame->getName(); ?></option>
+				<?php endforeach; ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit">Submit</button>
+            <button type="reset">Clear Form</button>
+        </div>
+
     </form>
 </div>
 
 <script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#boardgames').select2();
+    });
 
     /**
      * Checks if the firstName field is valid. If not, sets an appropriate message.

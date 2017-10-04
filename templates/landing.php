@@ -14,10 +14,10 @@
     <nav>
         <ul>
             <li><a href="/events.php">Upcoming Events</a></li>
-            <li><a href="/players.php">Members</a></li>
+            <li><a href="/members.php">Members</a></li>
             <li><a href="/boardgames.php">Board Games</a></li>
-            <li><a href="/players.php">Members</a></li>
-            <li><a href="/players.php">Previous Results/High Scores</a></li>
+            <li><a href="/members.php">Members</a></li>
+            <li><a href="/members.php">Previous Results/High Scores</a></li>
         </ul>
     </nav>
     <h1 class="text-center">Welcome</h1>

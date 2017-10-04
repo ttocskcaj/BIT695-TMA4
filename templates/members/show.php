@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $player->getFullName(); ?></title>
+    <title><?php echo $member->getFullName(); ?></title>
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./style.css">
@@ -13,43 +13,43 @@
     <nav>
         <ul>
             <li><a href="/events.php">Upcoming Events</a></li>
-            <li><a href="/players.php">Members</a></li>
+            <li><a href="/members.php">Members</a></li>
             <li><a href="/boardgames.php">Board Games</a></li>
-            <li><a href="/players.php">Previous Results/High Scores</a></li>
+            <li><a href="/members.php">Previous Results/High Scores</a></li>
         </ul>
     </nav>
-    <h1 class="text-center"><?php echo $player->getFullName(); ?></h1>
-    <p>Edit the player and click "update" to save changes.</p>
-    <form action="/players.php?page=update" method="post" id="form">
-        <!-- A hidden input to hold the players ID for updating the DB row -->
-        <input type="hidden" name="id" id="id" value="<?php echo $player->getId(); ?>">
+    <h1 class="text-center"><?php echo $member->getFullName(); ?></h1>
+    <p>Edit the member and click "update" to save changes.</p>
+    <form action="/members.php?page=update" method="post" id="form">
+        <!-- A hidden input to hold the members ID for updating the DB row -->
+        <input type="hidden" name="id" id="id" value="<?php echo $member->getId(); ?>">
         <div class="form-group">
             <label for="firstName">First Name: </label>
             <!-- Input for First Name. Using HTML5 validation, can't be more than 35 characters and is required -->
             <input type="text" id="firstName" name="firstName" class="form-input"
                    placeholder="First Name" required maxlength="35"
-                   value="<?php echo $player->getFirstName(); ?>">
+                   value="<?php echo $member->getFirstName(); ?>">
         </div>
         <div class="form-group">
             <label for="familyName">Family Name: </label>
             <!-- Input for Last Name. Using HTML5 validation, can't be more than 35 characters and is required -->
             <input type="text" id="familyName" name="familyName" class="form-input"
                    placeholder="Family Name" required maxlength="35"
-                   value="<?php echo $player->getFamilyName(); ?>">
+                   value="<?php echo $member->getFamilyName(); ?>">
         </div>
         <div class="form-group">
             <label for="email">Email Address: </label>
             <!-- Input for Email. Using HTML5 validation, must be an email address and is required -->
             <input type="email" id="email" name="email" class="form-input"
                    placeholder="Email Address" required
-                   value="<?php echo $player->getEmail(); ?>">
+                   value="<?php echo $member->getEmail(); ?>">
         </div>
         <div class="form-group">
             <label for="email">Phone Number: </label>
             <!-- Input for Phone. Using HTML5 validation, Must contain 5-10 numbers -->
             <input type="tel" id="phone" name="phone" class="form-input"
                    placeholder="Phone Number" required pattern="[0-9]{5,15}"
-                   value="<?php echo $player->getPhone(); ?>">
+                   value="<?php echo $member->getPhone(); ?>">
         </div>
         <button type="submit">Update</button>
         <button type="reset">Clear Form</button>
