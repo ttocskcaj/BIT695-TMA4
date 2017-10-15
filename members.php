@@ -19,6 +19,7 @@ if ( $_GET['page'] == "create" ) {
 // If the user is requesting the store page (save member to database)
 elseif ( $_GET['page'] == "store" ) {
 	// Convert a single boardgame submission to an array.
+	// The boardgames don't need validation as foreign keys protect the database.
 	$boardgames = array();
 	if ( isset( $_POST['boardgames'] ) ) {
 		if ( is_array( $_POST['boardgames'] ) ) {
@@ -51,9 +52,9 @@ elseif ( $_GET['page'] == "store" ) {
 		// Try and save that member to the database.
 		try {
 			$member->save();
-			$member->syncBoardgames($boardgames);
+			$member->syncBoardgames( $boardgames );
 			// If the user is saved correctly, show a success message.
-			showSuccessMessage( "New Member", "New member created successfully.", 'members.php?page=create' );
+			showSuccessMessage( "New Member", "New member created successfully.", 'members.php?page=index' );
 		} catch ( PDOException $e ) {
 			// If there is an error with PDO, show the error message.
 			showErrorMessage( "Database Error", $e->getMessage() );
@@ -67,8 +68,12 @@ elseif ( $_GET['page'] == "show" ) {
 	// If the id is set and is a number get the member from database.
 	if ( isset ( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) {
 		try {
+			// Get an array of all boardgames to show.
+			$boardgames = BoardgameModel::getAll();
+
 			// Get that member from the database.
 			$member = MemberModel::findByID( $_GET['id'] );
+
 			// Include the template to show that member.
 			include 'templates/members/show.php';
 		} catch ( PDOException $e ) {
@@ -92,6 +97,16 @@ elseif ( $_GET['page'] == "show" ) {
 
 // If the user is requesting the update page.
 elseif ( $_GET['page'] == "update" ) {
+	// Convert a single boardgame submission to an array.
+	$boardgames = array();
+	if ( isset( $_POST['boardgames'] ) ) {
+		if ( is_array( $_POST['boardgames'] ) ) {
+			$boardgames = $_POST['boardgames'];
+		}
+		else {
+			$boardgames[] = $_POST['boardgames'];
+		}
+	}
 	// Validate
 	$validation_results = Validate::check( $_POST, [
 		"id"         => "required|number",
@@ -122,6 +137,9 @@ elseif ( $_GET['page'] == "update" ) {
 
 			// Update the database row.
 			$member->update();
+
+			// Sync boardgames
+			$member->syncBoardgames( $boardgames );
 
 			// If the user is updated correctly, show a success message.
 			showSuccessMessage( "Updated Member", "The member's information was updated.", 'members.php?page=index' );

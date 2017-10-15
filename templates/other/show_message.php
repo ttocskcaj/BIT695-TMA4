@@ -12,6 +12,7 @@
 </head>
 <body>
 <div class="container">
+
     <div class="message message-<?php echo $message['type']; ?>">
         <h1 class="text-center"><?php echo $message['title']; ?></h1>
         <p><?php echo $message['body']; ?></p>

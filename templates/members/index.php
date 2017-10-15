@@ -12,15 +12,7 @@
 </head>
 <body>
 <div class="container">
-    <nav>
-        <ul>
-            <li><a href="/events.php">Upcoming Events</a></li>
-            <li><a href="/members.php">Members</a></li>
-            <li><a href="/boardgames.php">Board Games</a></li>
-            <li><a href="/members.php">Members</a></li>
-            <li><a href="/members.php">Previous Results/High Scores</a></li>
-        </ul>
-    </nav>
+	<?php require "templates/other/navigation.php" ?>
     <h1 class="text-center">Members</h1>
 	<?php foreach ( $members as $member ): ?>
         <div class="card">

@@ -10,6 +10,8 @@
 </head>
 <body>
 <div class="container">
+	<?php require "templates/other/navigation.php" ?>
+
     <h1 class="text-center">Events</h1>
     <table>
         <thead>
@@ -28,14 +30,14 @@
                 <td><?php echo $event->getName(); ?></td>
                 <td><?php echo $event->getLocation(); ?></td>
                 <td><?php echo $event->getCarbon()->format("F jS g:ia"); ?></td>
-                <td><a href="events.php?page=show&id=<?php echo $event->getId(); ?>">Edit</a> <a
-                            href="events.php?page=delete&id=<?php echo $event->getId(); ?>">Delete</a></td>
+                <td><a href="upcoming_events.php?page=show&id=<?php echo $event->getId(); ?>">Edit</a> <a
+                            href="upcoming_events.php?page=delete&id=<?php echo $event->getId(); ?>">Delete</a></td>
             </tr>
 		<?php endforeach; ?>
         </tbody>
 
     </table>
-    <a href="events.php?page=create">Create new event</a>
+    <a href="upcoming_events.php?page=create">Create new event</a>
 
 </div>
 

@@ -17,15 +17,8 @@
 </head>
 <body>
 <div class="container">
-    <nav>
-        <ul>
-            <li><a href="/events.php">Upcoming Events</a></li>
-            <li><a href="/members.php">Members</a></li>
-            <li><a href="/boardgames.php">Board Games</a></li>
-            <li><a href="/members.php">Members</a></li>
-            <li><a href="/members.php">Previous Results/High Scores</a></li>
-        </ul>
-    </nav>
+	<?php require "templates/other/navigation.php" ?>
+
     <h1 class="text-center">Create Member</h1>
     <p>Fill out the form and click "Submit" to create a new member.</p>
     <form action="/members.php?page=store" method="post" id="form">

@@ -30,7 +30,7 @@ class MemberModel {
 	}
 
 	/**
-	 * Saves (inserts) the user into the database.
+	 * Saves (inserts) the member into the database.
 	 *
 	 * @throws PDOException
 	 * @return bool True if the query is successful. False if it fails.
@@ -55,7 +55,7 @@ class MemberModel {
 	}
 
 	/**
-	 * Deletes the user from the database.
+	 * Deletes the member from the database.
 	 *
 	 * @throws PDOException
 	 * @return bool True if the query is successful. False if it fails.
@@ -98,6 +98,7 @@ class MemberModel {
 	 * Finds a member in the database by matching their ID.
 	 *
 	 * @param $id String - The Members ID number
+	 * @throws Exception If the member with that ID isn't found.
 	 */
 	public static function findByID( $id ) {
 		$pdo = Database::getPdo();
@@ -114,6 +115,12 @@ class MemberModel {
 		}
 	}
 
+	/**
+	 * Gets an array of every single member in the database.
+	 *
+	 * @return array
+	 * @throws Exception If no members exist in the database.
+	 */
 	public static function getAll() {
 		$pdo = Database::getPdo();
 
@@ -133,7 +140,9 @@ class MemberModel {
 		}
 	}
 
-	// Lazy load the joined boardgames.
+	/**
+	 * Loads the array of boardgames linked to this Memeber from the database.
+	 */
 	private function loadBoardgames() {
 		$pdo       = Database::getPdo();
 		$statement = $pdo->prepare( "SELECT boardgames.id, boardgames.name, boardgames.description FROM members_boardgames JOIN boardgames ON members_boardgames.boardgame_id = boardgames.id WHERE members_boardgames.member_id=?" );
@@ -144,12 +153,20 @@ class MemberModel {
 				$this->boardgames[] = new BoardgameModel( $result['name'], $result['description'], $result['id'] );
 			}
 		}
-
 	}
 
-	public function syncBoardgames( $boardgames ) {
+	/**
+	 * @param $boardgames
+	 * Synchronizes the members boardgames with the provided array.
+	 * I.E. the member will ONLY be linked to boardgames in this array.
+	 */
+	public function syncBoardgames( Array $boardgames ) {
 		$pdo = Database::getPdo();
 
+		/**
+		 * The following code is completed in a transaction. That means that if any boardgame is not linked, then all get rolled back.
+		 * Prepared statements also make doing the same query multiple times a lot quicker.
+		 */
 		try {
 			// Delete existing boardgame links.
 			$statement = $pdo->prepare( "DELETE FROM members_boardgames WHERE member_id = ?" );

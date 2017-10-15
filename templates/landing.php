@@ -11,15 +11,7 @@
 <body>
 
 <div class="container">
-    <nav>
-        <ul>
-            <li><a href="/events.php">Upcoming Events</a></li>
-            <li><a href="/members.php">Members</a></li>
-            <li><a href="/boardgames.php">Board Games</a></li>
-            <li><a href="/members.php">Members</a></li>
-            <li><a href="/members.php">Previous Results/High Scores</a></li>
-        </ul>
-    </nav>
+	<?php include "templates/other/navigation.php"; ?>
     <h1 class="text-center">Welcome</h1>
     <p>Our club currently has a membership of around 30 with a committed core group of 20 or so. We are always keen
         to welcome new members. All equipment is provided by the club. There is no annual fee but members pay a

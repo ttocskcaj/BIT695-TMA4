@@ -10,15 +10,17 @@
 </head>
 <body>
 <div class="container">
+	<?php require "templates/other/navigation.php" ?>
+
     <h1 class="text-center"><?php echo $event->getName(); ?></h1>
     <p>Edit the event and click "update" to save changes.</p>
-    <form action="/events.php?page=update" method="post" id="form">
+    <form action="/upcoming_events.php?page=update" method="post" id="form">
         <!-- A hidden input to hold the events ID for updating the DB row -->
         <input type="hidden" name="id" id="id" value="<?php echo $event->getId(); ?>">
         <div class="form-group">
             <label for="firstName">Event Name: </label>
             <!-- Input for First Name. Using HTML5 validation, can't be more than 35 characters and is required -->
-            <input type="text" id="eventName" name="eventName" class="form-input"
+            <input type="text" id="name" name="name" class="form-input"
                    placeholder="Event Name" required maxlength="35"
                    value="<?php echo $event->getName(); ?>">
         </div>
@@ -34,7 +36,7 @@
             <!-- Input for Email. Using HTML5 validation, must be an email address and is required -->
             <input type="datetime-local" id="dateTime" name="dateTime" class="form-input"
                    placeholder="Email Address" required
-                   value="<?php echo $event->getCarbon()->format('Y-m-d\TH:i:s'); ?>">
+                   value="<?php echo $event->getCarbon()->format( 'Y-m-d\TH:i:s' ); ?>">
         </div>
 
         <button type="submit">Update</button>
@@ -45,16 +47,16 @@
 <script type="text/javascript">
 
     /**
-     * Checks if the eventName field is valid. If not, sets an appropriate message.
-     * @param eventName The input object
+     * Checks if the name field is valid. If not, sets an appropriate message.
+     * @param name The input object
      */
-    var eventNameValidation = function (eventName) {
-        if (eventName.validity.valueMissing) {
-            eventName.setCustomValidity("A name for the event is required.");
-        } else if (eventName.validity.tooLong) {
-            eventName.setCustomValidity("The event name can't be more than 35 characters long.")
+    var nameValidation = function (name) {
+        if (name.validity.valueMissing) {
+            name.setCustomValidity("A name for the event is required.");
+        } else if (name.validity.tooLong) {
+            name.setCustomValidity("The event name can't be more than 35 characters long.")
         } else {
-            eventName.setCustomValidity("");
+            name.setCustomValidity("");
         }
     };
 
@@ -85,25 +87,24 @@
     };
 
 
-
     // When the page loads,
     window.onload = function () {
 
         // Gets each object from the DOM.
         var form = document.getElementById("form");
-        var eventName = document.getElementById("eventName");
+        var name = document.getElementById("name");
         var location = document.getElementById("location");
         var dateTime = document.getElementById("dateTime");
 
         // When the page is loaded, call each of the methods to set the validation messages for each input.
         // This is in case a user submits without entering anything.
-        eventNameValidation(eventName);
+        nameValidation(name);
         locationValidation(location);
         dateTimeValidation(dateTime);
 
         // Each time there is an "input" event, update each of the validation messages.
         form.addEventListener("input", function () {
-            eventNameValidation(eventName);
+            nameValidation(name);
             locationValidation(location);
             dateTimeValidation(dateTime);
         });

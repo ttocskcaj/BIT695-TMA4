@@ -9,6 +9,8 @@
 </head>
 <body>
 <div class="container">
+	<?php require "templates/other/navigation.php" ?>
+
     <h1>Validation Failed!</h1>
 
 	<?php foreach ( $validation_results->getResults() as $input => $errors ): ?>

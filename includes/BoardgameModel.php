@@ -73,6 +73,7 @@ class BoardgameModel {
 		// Create a prepared statement for the query to insert the boardgame.
 		$statement = $pdo->prepare( "UPDATE boardgames SET name = :name, description = :description WHERE id = :id" );
 		// Bind the named parameters to the statement.
+		$statement->bindParam( ":id", $this->id );
 		$statement->bindParam( ":name", $this->name );
 		$statement->bindParam( ":description", $this->description );
 

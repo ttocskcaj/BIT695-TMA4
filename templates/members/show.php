@@ -7,17 +7,16 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./style.css">
 
+    <!--    jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Select2 library -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
 </head>
 <body>
 <div class="container">
-    <nav>
-        <ul>
-            <li><a href="/events.php">Upcoming Events</a></li>
-            <li><a href="/members.php">Members</a></li>
-            <li><a href="/boardgames.php">Board Games</a></li>
-            <li><a href="/members.php">Previous Results/High Scores</a></li>
-        </ul>
-    </nav>
+	<?php require "templates/other/navigation.php" ?>
+
     <h1 class="text-center"><?php echo $member->getFullName(); ?></h1>
     <p>Edit the member and click "update" to save changes.</p>
     <form action="/members.php?page=update" method="post" id="form">
@@ -51,13 +50,27 @@
                    placeholder="Phone Number" required pattern="[0-9]{5,15}"
                    value="<?php echo $member->getPhone(); ?>">
         </div>
+        <div class="form-group">
+            <label for="boardgames">Board Games: </label>
+            <select multiple id="boardgames" name="boardgames[]" class="form-input">
+				<?php foreach ( $boardgames as $boardgame ): ?>
+                    <option value="<?php echo $boardgame->getId(); ?>" <?php if ( in_array( $boardgame, $member->getBoardgames() ) )
+						echo "selected" ?>><?php echo $boardgame->getName(); ?></option>
+				<?php endforeach; ?>
+            </select>
+        </div>
         <button type="submit">Update</button>
         <button type="reset">Clear Form</button>
     </form>
 </div>
 
 <script type="text/javascript">
-
+    /**
+     * Select2 library to make boardgame selection pretty and easy to use
+     */
+    $(document).ready(function () {
+        $('#boardgames').select2();
+    });
     /**
      * Checks if the firstName field is valid. If not, sets an appropriate message.
      * @param firstName The input object
